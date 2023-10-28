@@ -9,4 +9,4 @@ export const Card = styled.div(({ theme }) => ({
   flexDirection: "row",
   alignItems: "center",
   gap: theme.spacing(1.5),
-}));
+}))
