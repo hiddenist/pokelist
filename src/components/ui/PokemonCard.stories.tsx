@@ -2,7 +2,7 @@ import { StoryDefault, Story } from "@ladle/react"
 import { PokemonCard } from "./PokemonCard"
 
 export default {
-  title: "Card",
+  title: "Pokemon List",
   args: {
     pokedexNumber: 1,
     name: "bulbasaur",
@@ -14,7 +14,7 @@ type StoryProps = {
   name: string
 }
 
-export const Pokemon: Story<StoryProps> = ({ pokedexNumber, name }) => {
+export const Card: Story<StoryProps> = ({ pokedexNumber, name }) => {
   return (
     <PokemonCard
       pokemon={{

@@ -3,7 +3,7 @@ import styled from "@emotion/styled"
 import { RadioLabel, RadioLabelProps } from "./RadioLabel"
 
 export interface RadioGroup<T extends string | number>
-  extends Omit<React.HTMLProps<HTMLDivElement>, "label" | "as" | "value">,
+  extends Omit<React.HTMLProps<HTMLFieldSetElement>, "label" | "as" | "value">,
     Pick<RadioLabelProps<T>, "value" | "setValue"> {
   options: ReadonlyArray<{
     id: string
@@ -27,18 +27,17 @@ export const RadioGroup = <T extends string | number>({
           label={option.label}
           value={option.value}
           checked={option.value === value}
-          setValue={(isSelected) => {
-            if (isSelected) {
-              setValue(option.value)
-            }
-          }}
+          setValue={() => setValue(option.value)}
         />
       ))}
     </RadioGroupWrapper>
   )
 }
 
-const RadioGroupWrapper = styled.div(({ theme }) => ({
+const RadioGroupWrapper = styled.fieldset(({ theme }) => ({
   display: "flex",
   gap: theme.spacing(1),
+  border: "none",
+  padding: 0,
+  margin: 0,
 }))

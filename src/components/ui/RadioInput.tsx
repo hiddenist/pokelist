@@ -2,19 +2,21 @@ import React from "react"
 import styled from "@emotion/styled"
 
 export interface RadioInputProps<T extends string | number>
-  extends Omit<React.HTMLProps<HTMLInputElement>, "type" | "as"> {
-  value: T
+  extends Omit<React.HTMLProps<HTMLInputElement>, "type" | "as" | "value"> {
+  value: T | null | undefined
   setValue: (newValue: T) => void
 }
 
 export const RadioInput = <T extends string | number>({
   setValue,
+  value,
   ...radioProps
 }: RadioInputProps<T>) => {
   return (
     <Radio
       type="radio"
       {...radioProps}
+      value={value ?? undefined}
       onChange={(e) => {
         radioProps?.onChange?.(e)
         if (!e.isDefaultPrevented() && e.target.checked) {
