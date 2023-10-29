@@ -50,12 +50,32 @@ const palette = {
     $40: "#216400",
     $50: "#113200",
   },
-} as const satisfies Record<string, Record<string, `#${string}`>>
+  // these are colors used in the designs that aren't actually in the Style Guide:
+  offSpec: {
+    spriteBackground: "rgba(0, 0, 0, 0.07)",
+  },
+} as const satisfies Record<
+  string,
+  Record<string, `#${string}` | `rgba(${string})`>
+>
 
 const fontFamilies = {
   default: "Roboto, sans-serif",
   headings: "Encode Sans, sans-serif",
 } as const
+
+function spacing(space: number): string
+function spacing(topBottom: number, sides: number): string
+function spacing(top: number, sides: number, bottom: number): string
+function spacing(
+  top: number,
+  right: number,
+  left: number,
+  bottom: number
+): string
+function spacing(...factor: number[]) {
+  return factor.map((f) => `${8 * f}px`).join(" ")
+}
 
 const theme = {
   palette,
@@ -151,7 +171,7 @@ const theme = {
     },
   } satisfies Record<string, CSSProperties>,
   cornerRadius: "12px",
-  spacing: (factor: number) => `${8 * factor}px`,
+  spacing,
 } as const
 
 export type Theme = typeof theme

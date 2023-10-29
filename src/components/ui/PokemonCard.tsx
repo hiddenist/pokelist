@@ -36,8 +36,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   img: {
     width: "72px",
     aspectRatio: "1 / 1",
-    // note: In Figma, this background color isn't in the palette. This is the closest match.
-    backgroundColor: theme.palette.neutral.$30,
+    backgroundColor: theme.palette.offSpec.spriteBackground,
     borderRadius: "50%",
   },
   div: {

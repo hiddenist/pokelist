@@ -1,17 +1,27 @@
 import { StoryDefault, Story } from "@ladle/react"
-import { PokemonCard } from "./PokemonCard.tsx"
+import { PokemonCard } from "./PokemonCard"
 
-export default {} satisfies StoryDefault
+export default {
+  title: "Card",
+  args: {
+    pokedexNumber: 1,
+    name: "bulbasaur",
+  },
+} satisfies StoryDefault<StoryProps>
 
-export const Default: Story = () => {
+type StoryProps = {
+  pokedexNumber: number
+  name: string
+}
+
+export const Pokemon: Story<StoryProps> = ({ pokedexNumber, name }) => {
   return (
     <PokemonCard
       pokemon={{
         sprites: {
-          front_default:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+          front_default: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedexNumber}.png`,
         },
-        name: "bulbasaur",
+        name: name,
       }}
     />
   )

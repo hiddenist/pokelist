@@ -1,13 +1,13 @@
 import { ThemeProvider } from "./theme/ThemeProvider"
-import { LandingPage } from "./components/pages/LandingPage.tsx"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { PokemonListPage } from "./components/pages/PokemonListPage.tsx"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { queryClient } from "./api/queryClient"
 
-const queryClient = new QueryClient()
 function App() {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <LandingPage />
+        <PokemonListPage />
       </QueryClientProvider>
     </ThemeProvider>
   )

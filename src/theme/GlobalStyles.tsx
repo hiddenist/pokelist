@@ -1,16 +1,27 @@
-import { Global, useTheme } from "@emotion/react"
+import { Global, Theme, useTheme } from "@emotion/react"
 import React, { CSSProperties } from "react"
+import { Interpolation } from "@emotion/styled"
 
 export const GlobalStyles = () => {
   const theme = useTheme()
 
-  const styles = React.useMemo(
+  const styles = React.useMemo<Interpolation<Theme>>(
     () => ({
+      "*, *::before, *::after": {
+        boxSizing: "border-box",
+      },
+      "html, body, #root": {
+        height: "100%",
+      },
       body: {
         margin: 0,
         padding: 0,
         backgroundColor: theme.color.background.page,
         ...theme.typography.body1,
+      },
+      "#root": {
+        display: "flex",
+        flexDirection: "column",
       },
       "h1, h2, h3, h4, h5, h6": {
         margin: 0,
