@@ -24,7 +24,7 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({
           alt={`sprite of ${pokemon.name}`}
         />
       )}
-      <div>{pokemon.name}</div>
+      <div className="typography-h5">{pokemon.name}</div>
     </StyledCard>
   )
 }
