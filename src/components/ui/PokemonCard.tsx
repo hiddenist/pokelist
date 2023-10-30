@@ -1,35 +1,43 @@
 import React from "react"
 import { Card } from "./Card"
-import { Pokemon } from "pokenode-ts"
 import styled from "@emotion/styled"
 
 export interface PokemonCardProps
   extends Omit<React.HTMLProps<HTMLDivElement>, "as"> {
   as?: "div" | "li"
-  pokemon: {
-    sprites: Pick<Pokemon["sprites"], "front_default">
-    name: Pokemon["name"]
-  }
+  pokemonName?: string
+  spriteUrl?: string | null
+  hasSprite?: boolean
+  isLoading?: boolean
 }
 
+const noSprite = new URL("/decamark.png", import.meta.url).href
+const transparentPixel =
+  "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+
 export const PokemonCard: React.FC<PokemonCardProps> = ({
-  pokemon,
+  title,
+  spriteUrl,
+  hasSprite = true,
   ...cardProps
 }) => {
   return (
     <StyledCard {...cardProps}>
-      {pokemon.sprites.front_default && (
-        <img
-          src={pokemon.sprites.front_default}
-          alt={`sprite of ${pokemon.name}`}
-        />
+      {hasSprite ? (
+        <img src={spriteUrl ?? transparentPixel} alt={`sprite of ${title}`} />
+      ) : (
+        <img src={noSprite} alt={`unable to find a sprite for ${title}`} />
       )}
-      <div className="typography-h5">{pokemon.name}</div>
+      <div className="typography-h5">{title}</div>
     </StyledCard>
   )
 }
 
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card, {
+  shouldForwardProp(p) {
+    return p !== "isLoading"
+  },
+})<Pick<PokemonCardProps, "isLoading">>(({ theme, isLoading }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(1.5),
@@ -45,4 +53,20 @@ const StyledCard = styled(Card)(({ theme }) => ({
     textTransform: "capitalize",
     flex: 1,
   },
+
+  ...(isLoading && {
+    // animate the card when loading
+    animation: "pulse 1s ease-in-out infinite",
+    "@keyframes pulse": {
+      "0%": {
+        opacity: 0.5,
+      },
+      "50%": {
+        opacity: 1,
+      },
+      "100%": {
+        opacity: 0.5,
+      },
+    },
+  }),
 }))

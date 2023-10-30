@@ -3,6 +3,8 @@ import { useAllPokemon } from "./useAllPokemon"
 import { getPageSlice } from "./getPageSlice"
 import { fetchPokemonDetails } from "./fetchPokemonDetails"
 import { SortBy } from "./getSortedPokemon"
+import { Pokemon } from "pokenode-ts"
+import React from "react"
 
 export const usePokemonList = ({
   page = 1,
@@ -10,8 +12,26 @@ export const usePokemonList = ({
   sortBy = "id",
 }: { page?: number; perPage?: number; sortBy?: SortBy } = {}) => {
   const { data: byId, byName, isSuccess } = useAllPokemon()
+
+  const placeholderData = React.useMemo(() => {
+    return {
+      id: byId
+        ? getPageSlice(byId, page, perPage).map((p) => ({
+            name: p.name,
+            isLoading: true,
+          }))
+        : [],
+      name: byName
+        ? getPageSlice(byName, page, perPage).map((p) => ({
+            name: p.name,
+            isLoading: true,
+          }))
+        : [],
+    } satisfies Record<SortBy, Partial<Pokemon & { isLoading: true }>[]>
+  }, [byId, byName, page, perPage])
+
   const queryClient = useQueryClient()
-  const query = useQuery({
+  const query = useQuery<(Pokemon | Partial<Pokemon & { isLoading: true }>)[]>({
     queryKey: ["pokemonList", { page, perPage, sortBy }],
     queryFn: async () => {
       const allPokemon = sortBy == "name" ? byName : byId
@@ -33,7 +53,7 @@ export const usePokemonList = ({
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    placeholderData: (previousData) => previousData ?? [],
+    placeholderData: (previousData) => previousData ?? placeholderData[sortBy],
     enabled: isSuccess,
   })
 

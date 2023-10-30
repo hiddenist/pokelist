@@ -6,6 +6,7 @@ import styled, { Interpolation } from "@emotion/styled"
 import { Button } from "../ui/Button"
 import { SortBy } from "../../api/getSortedPokemon"
 import { Theme } from "@emotion/react"
+import { Loader } from "../ui/Loader"
 
 const sortOptions = [
   { id: "sortByName", label: "Sort Name", value: "name" },
@@ -16,11 +17,7 @@ export const PokemonListPage = () => {
   const [sortBy, setSortBy] = React.useState<SortBy>("id")
   const [page, setPage] = React.useState(1)
   const perPage = 12
-  const { data: pokemon = [], pages } = usePokemonList({
-    page,
-    sortBy,
-    perPage,
-  })
+  const [totalPages, setTotalPages] = React.useState(0)
 
   return (
     <Page>
@@ -30,7 +27,14 @@ export const PokemonListPage = () => {
       </header>
       <main>
         <div className="overflow">
-          <PokemonList pokemon={pokemon} />
+          <React.Suspense fallback={<Loader>Booting the Pokédex...</Loader>}>
+            <PokemonListApi
+              sortBy={sortBy}
+              page={page}
+              perPage={perPage}
+              onSetTotalPages={setTotalPages}
+            />
+          </React.Suspense>
         </div>
       </main>
       <footer>
@@ -42,8 +46,8 @@ export const PokemonListPage = () => {
             Previous {perPage}
           </Button>
           <Button
-            disabled={page >= pages}
-            onClick={() => setPage((p) => (p < pages ? p + 1 : p))}
+            disabled={page >= totalPages}
+            onClick={() => setPage((p) => (p < totalPages ? p + 1 : p))}
           >
             Next {perPage}
           </Button>
@@ -51,6 +55,25 @@ export const PokemonListPage = () => {
       </footer>
     </Page>
   )
+}
+
+const PokemonListApi: React.FC<{
+  page: number
+  sortBy: SortBy
+  perPage: number
+  onSetTotalPages: (totalPages: number) => void
+}> = ({ page, sortBy, perPage, onSetTotalPages }) => {
+  const { data: pokemon = [], pages } = usePokemonList({
+    page,
+    sortBy,
+    perPage,
+  })
+
+  React.useEffect(() => {
+    onSetTotalPages(pages)
+  }, [pages, onSetTotalPages])
+
+  return <PokemonList pokemon={pokemon} />
 }
 
 const Page = styled.div(({ theme }) => ({

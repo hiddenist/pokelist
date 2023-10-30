@@ -4,7 +4,7 @@ import { PokemonCard } from "./PokemonCard"
 import styled from "@emotion/styled"
 
 export interface PokemonListProps {
-  pokemon: Pokemon[]
+  pokemon: (Pokemon | Partial<Pokemon & { isLoading: true }>)[]
 }
 
 export const PokemonList: React.FC<PokemonListProps> = ({
@@ -12,8 +12,15 @@ export const PokemonList: React.FC<PokemonListProps> = ({
 }) => {
   return (
     <List>
-      {pokemonList.map((pokemon) => (
-        <PokemonCard key={pokemon.id} pokemon={pokemon} as="li" />
+      {pokemonList.map((pokemon, i) => (
+        <PokemonCard
+          key={pokemon?.id || `unknown-${i}`}
+          title={pokemon?.name}
+          spriteUrl={pokemon?.sprites?.front_default}
+          hasSprite={pokemon?.sprites?.front_default !== null}
+          isLoading={"isLoading" in pokemon && pokemon?.isLoading}
+          as="li"
+        />
       ))}
     </List>
   )
