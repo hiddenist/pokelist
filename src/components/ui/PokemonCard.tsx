@@ -5,7 +5,7 @@ import styled from "@emotion/styled"
 export interface PokemonCardProps
   extends Omit<React.HTMLProps<HTMLDivElement>, "as"> {
   as?: "div" | "li"
-  pokemonName?: string
+  pokemonName: string | undefined | null
   spriteUrl?: string | null
   hasSprite?: boolean
   isLoading?: boolean
@@ -19,16 +19,18 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({
   title,
   spriteUrl,
   hasSprite = true,
+  pokemonName,
+  isLoading,
   ...cardProps
 }) => {
   return (
-    <StyledCard {...cardProps}>
+    <StyledCard aria-busy={isLoading} aria- isLoading={isLoading} {...cardProps}>
       {hasSprite ? (
-        <img src={spriteUrl ?? transparentPixel} alt={`sprite of ${title}`} />
+        <img src={spriteUrl ?? transparentPixel} alt={`sprite of ${pokemonName}`} />
       ) : (
-        <img src={noSprite} alt={`unable to find a sprite for ${title}`} />
+        <img src={noSprite} alt={`unable to find a sprite for ${pokemonName}`} />
       )}
-      <div className="typography-h5">{title}</div>
+      <div className="typography-h5">{pokemonName}</div>
     </StyledCard>
   )
 }

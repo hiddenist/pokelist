@@ -4,25 +4,27 @@ import { PokemonCard } from "./PokemonCard"
 export default {
   title: "Pokemon List",
   args: {
-    pokedexNumber: 1,
+    spriteUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
     name: "bulbasaur",
+    hasSprite: true,
+    isLoading: false,
   },
 } satisfies StoryDefault<StoryProps>
 
 type StoryProps = {
-  pokedexNumber: number
-  name: string
+  spriteUrl?: string
+  name?: string
+  hasSprite?: boolean
+  isLoading?: boolean
 }
 
-export const Card: Story<StoryProps> = ({ pokedexNumber, name }) => {
+export const Card: Story<StoryProps> = ({ isLoading, spriteUrl, name, hasSprite = true }) => {
   return (
     <PokemonCard
-      pokemon={{
-        sprites: {
-          front_default: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokedexNumber}.png`,
-        },
-        name: name,
-      }}
+      pokemonName={name}
+      spriteUrl={spriteUrl || undefined}
+      hasSprite={hasSprite}
+      isLoading={isLoading}
     />
   )
 }

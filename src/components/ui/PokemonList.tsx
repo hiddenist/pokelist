@@ -15,7 +15,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({
       {pokemonList.map((pokemon, i) => (
         <PokemonCard
           key={pokemon?.id || `unknown-${i}`}
-          title={pokemon?.name}
+          pokemonName={pokemon?.name}
           spriteUrl={pokemon?.sprites?.front_default}
           hasSprite={pokemon?.sprites?.front_default !== null}
           isLoading={"isLoading" in pokemon && pokemon?.isLoading}
